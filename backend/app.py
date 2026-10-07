@@ -8,7 +8,7 @@ Retrieval flow:
 import os
 import traceback
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -28,6 +28,8 @@ app = Flask(__name__)
 CORS(app)
 
 BASE_DIR    = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
+
 VECTOR_DIR  = os.path.join(BASE_DIR, "vector_store")
 CHUNKS_DIR  = os.path.join(BASE_DIR, "chunks")
 
@@ -78,7 +80,7 @@ session_attributes = {}
 
 @app.route("/")
 def index():
-    return jsonify({"status": "ok", "cars_available": faiss_index.ntotal})
+    return send_from_directory(FRONTEND_DIR, "index.html")
 
 
 @app.route("/health", methods=["GET"])
